@@ -76,7 +76,7 @@ fun ChallengesScreen () {
                         .fillMaxWidth()
                         .heightIn(min = 250.dp)
                         .clip(MaterialTheme.shapes.large)
-                        .background(Color.White)
+//                        .background(Color.White)
                         .padding(10.dp)
                 ) {
                     Column (
@@ -115,12 +115,3 @@ fun ChallengesScreen () {
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun ChallengesScreenPreview(){
-    ChallengesScreen()
-}
-
-
-

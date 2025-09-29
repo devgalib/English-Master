@@ -1,14 +1,22 @@
 package com.edureminder.english.screen.challenges_screen.word_matching_quiz
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 data class QuizItem(val id: Int, val text: String)
 
@@ -44,25 +52,64 @@ fun WordMatchingQuiz(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+
         ) {
             // Words column
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 words.forEach { word ->
                     val isSelected = selectedWord?.id == word.id
                     val isMatched = matchedIds.contains(word.id)
 
-                    val backgroundColor by animateColorAsState(
+                    val shadowColor by animateColorAsState(
                         targetValue = when {
                             isMatched -> Color.Gray
-                            isSelected -> Color(0xFF2196F3)
-                            else -> Color.LightGray
+                            isSelected -> Color(0xFF4CAF50)
+                            else -> Color.Gray
+                        }, label = ""
+                    )
+                    val backgroundColor by animateColorAsState(
+                        targetValue = when {
+                            isMatched -> Color.LightGray
+                            isSelected -> Color(0xFF4CAF50)
+                            else -> Color.White
+                        }, label = ""
+                    )
+                    val contentColor by animateColorAsState(
+                        targetValue = when {
+                            isMatched -> Color.Gray
+                            isSelected -> Color.White
+                            else -> Color.Black
                         }, label = ""
                     )
 
-                    Button(
-                        onClick = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .clip(CircleShape)
+                            .background(shadowColor)
+                            .shadow(
+                                elevation = 4.dp,
+                                shape = CircleShape
+                            )
+                            .padding(
+                                bottom = 4.dp,
+                                top = 2.dp,
+                                start = 3.dp,
+                                end = 3.dp
+                            )
+                            .clip(CircleShape)
+                            .background(backgroundColor)
+                            .clickable(
+                                enabled = !isMatched
+                            ){
                             selectedWord = word
                             if (selectedMeaning != null) {
                                 checkAnswer(
@@ -76,53 +123,93 @@ fun WordMatchingQuiz(modifier: Modifier = Modifier) {
                                 selectedMeaning = null
                             }
                         },
-                        enabled = !isMatched,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = backgroundColor,
-                            disabledContainerColor = Color.DarkGray
-                        )
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text("${word.id}. ${word.text}")
+                        Text(
+                            "${word.id}. ${word.text}",
+                            color = contentColor,
+                            fontSize = 16.sp
+                        )
                     }
                 }
             }
 
             // Meanings column
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 meanings.forEach { meaning ->
                     val isSelected = selectedMeaning?.id == meaning.id
                     val isMatched = matchedIds.contains(meaning.id)
 
-                    val backgroundColor by animateColorAsState(
+
+                    val shadowColor by animateColorAsState(
                         targetValue = when {
                             isMatched -> Color.Gray
                             isSelected -> Color(0xFF4CAF50)
-                            else -> Color.LightGray
+                            else -> Color.Gray
+                        }, label = ""
+                    )
+                    val backgroundColor by animateColorAsState(
+                        targetValue = when {
+                            isMatched -> Color.LightGray
+                            isSelected -> Color(0xFF4CAF50)
+                            else -> Color.White
+                        }, label = ""
+                    )
+                    val contentColor by animateColorAsState(
+                        targetValue = when {
+                            isMatched -> Color.Gray
+                            isSelected -> Color.White
+                            else -> Color.Black
                         }, label = ""
                     )
 
-                    Button(
-                        onClick = {
-                            selectedMeaning = meaning
-                            if (selectedWord != null) {
-                                checkAnswer(
-                                    selectedWord!!,
-                                    meaning,
-                                    matchedIds,
-                                    onCorrect = { matchedIds = it; message = "✅ Correct!" },
-                                    onWrong = { message = "❌ Wrong! Try again" }
-                                )
-                                selectedWord = null
-                                selectedMeaning = null
-                            }
-                        },
-                        enabled = !isMatched,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = backgroundColor,
-                            disabledContainerColor = Color.DarkGray
-                        )
+
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp)
+                            .clip(CircleShape)
+                            .background(shadowColor)
+                            .padding(
+                                bottom = 4.dp,
+                                top = 2.dp,
+                                start = 3.dp,
+                                end = 3.dp
+                            )
+                            .shadow(
+                                elevation = 4.dp,
+                                shape = CircleShape
+                            )
+                            .clip(CircleShape)
+                            .background(backgroundColor)
+                            .clickable(
+                                enabled = !isMatched
+                            ){
+                                selectedMeaning = meaning
+                                if (selectedWord != null) {
+                                    checkAnswer(
+                                        selectedWord!!,
+                                        meaning,
+                                        matchedIds,
+                                        onCorrect = { matchedIds = it; message = "✅ Correct!" },
+                                        onWrong = { message = "❌ Wrong! Try again" }
+                                    )
+                                    selectedWord = null
+                                    selectedMeaning = null
+                                }
+                            },
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text("${meaning.id}. ${meaning.text}")
+                        Text(
+                            "${meaning.id}. ${meaning.text}",
+                            color = contentColor,
+                            fontSize = 16.sp
+                        )
                     }
                 }
             }
@@ -140,16 +227,8 @@ fun WordMatchingQuiz(modifier: Modifier = Modifier) {
     }
 }
 
-private fun checkAnswer(
-    word: QuizItem,
-    meaning: QuizItem,
-    matchedIds: Set<Int>,
-    onCorrect: (Set<Int>) -> Unit,
-    onWrong: () -> Unit
-) {
-    if (word.id == meaning.id) {
-        onCorrect(matchedIds + word.id)
-    } else {
-        onWrong()
-    }
+@Preview(showBackground = true)
+@Composable
+fun WordMatchingQuizPreview(){
+    WordMatchingQuiz()
 }
