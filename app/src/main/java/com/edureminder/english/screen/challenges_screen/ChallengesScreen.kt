@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.edureminder.english.screen.challenges_screen.word_matching_quiz.WordMatchingQuiz
 import com.edureminder.english.ui.theme.PrimaryColor
 import com.edureminder.english.view_model.ChallengeScreenViewModel
 
@@ -55,7 +56,11 @@ fun ChallengesScreen () {
                 ProgressBarHeader()
                 when(manageViewModel.currentQuizIndex){
                     0 -> TextToImageSelectQuiz(
-                        modifier = Modifier
+                            modifier = Modifier
+                                .weight(1f)
+                    )
+                    1 -> WordMatchingQuiz(
+                          modifier = Modifier
                             .weight(1f)
                     )
                 }
